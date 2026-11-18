@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  # سرویس فرانت‌اند ری‌اکت (Vite + React + Tailwind + Nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: invoice_finance_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  # سرویس بک‌اند (Node.js + Express)
   backend:
     build:
       context: ./backend-api
@@ -20,12 +33,13 @@ services:
       mongodb:
         condition: service_healthy
 
+  # پایگاه داده مونگو دی‌بی
   mongodb:
     image: mongo:7.0
     container_name: invoice_finance_mongodb
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     volumes:
       - mongo_data:/data/db
     healthcheck:
