@@ -1,12 +1,16 @@
 {
-  "name": "frontend",
+  "name": "invoice-finance-system",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend": "npm --prefix backend-api start",
+    "backend:dev": "npm --prefix backend-api run dev",
+    "backend:seed": "npm --prefix backend-api run seed",
+    "backend:test": "npm --prefix backend-api test"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",

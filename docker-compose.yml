@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # سرویس فرانت‌اند ری‌اکت (Vite + React + Tailwind + Nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: invoice_finance_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  # سرویس بک‌اند (Node.js + Express)
+  backend:
+    build:
+      context: ./backend-api
+      dockerfile: Dockerfile
+    container_name: invoice_finance_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - MONGODB_URI=mongodb://mongodb:27017/invoice_finance_db
+      - JWT_SECRET=super_secret_jwt_key_invoice_finance_system_2026
+      - CLIENT_URL=http://localhost:5173
+      - NODE_ENV=development
+      - AUTO_SEED=true
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # پایگاه داده مونگو دی‌بی
+  mongodb:
+    image: mongo:7.0
+    container_name: invoice_finance_mongodb
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo_data:
