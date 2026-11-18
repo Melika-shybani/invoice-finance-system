@@ -2,12 +2,6 @@ import { useState } from 'react'
 import { useAuth } from '../auth'
 import { Button, Field } from '../components/ui'
 
-const demo = [
-  { u: 'admin', p: 'admin123', r: 'مدیر سیستم' },
-  { u: 'acc', p: 'acc123', r: 'حسابدار' },
-  { u: 'sales', p: 'sales123', r: 'کاربر فروش' },
-]
-
 export default function Login() {
   const { login } = useAuth()
   const [username, setU] = useState('')
@@ -46,7 +40,6 @@ export default function Login() {
         <div className="text-center">
           <div className="mx-auto mb-3 grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-brand-600 to-sky-400 text-2xl font-bold text-white shadow-lg shadow-brand-500/30">ص</div>
           <h1 className="text-lg font-bold">ورود به سامانه مدیریت مالی</h1>
-          <p className="text-xs text-slate-500 mt-1">متصل به سرویس احراز هویت Backend</p>
         </div>
         <Field label="نام کاربری">
           <input
@@ -55,6 +48,7 @@ export default function Login() {
             autoFocus
             dir="ltr"
             disabled={loading}
+            placeholder="نام کاربری"
           />
         </Field>
         <Field label="رمز عبور">
@@ -64,30 +58,13 @@ export default function Login() {
             onChange={(e) => setP(e.target.value)}
             dir="ltr"
             disabled={loading}
+            placeholder="رمز عبور"
           />
         </Field>
         {error && <p className="text-sm text-rose-600 bg-rose-50 p-2.5 rounded-xl border border-rose-100">{error}</p>}
         <Button className="w-full" onClick={undefined} type="submit" disabled={loading}>
           {loading ? 'در حال برقراری ارتباط...' : 'ورود'}
         </Button>
-        <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-500">
-          <div className="mb-1 font-medium">حساب‌های آزمایشی (کلیک برای پر کردن):</div>
-          {demo.map((d) => (
-            <button
-              key={d.u}
-              type="button"
-              className="block w-full py-0.5 text-start hover:text-brand-600 disabled:opacity-50"
-              disabled={loading}
-              onClick={() => {
-                setU(d.u)
-                setP(d.p)
-                setError('')
-              }}
-            >
-              {d.r}: <span className="num">{d.u} / {d.p}</span>
-            </button>
-          ))}
-        </div>
       </form>
     </div>
   )
