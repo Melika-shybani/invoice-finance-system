@@ -11,9 +11,12 @@ services:
       - PORT=8000
       - MONGODB_URI=mongodb://mongodb:27017/invoice_finance_db
       - JWT_SECRET=super_secret_jwt_key_invoice_finance_system_2026
-      - NODE_ENV=production
+      - CLIENT_URL=http://localhost:5173
+      - NODE_ENV=development
+      - AUTO_SEED=true
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
 
   mongodb:
     image: mongo:7.0
@@ -23,6 +26,12 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   mongo_data:
